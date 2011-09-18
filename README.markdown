@@ -1,6 +1,6 @@
-# KnockKnock who's there?
+# Knock knock who's there?
 
-A small validation framework for knockout that's who! ( this sounded funnier in my head ). Didn't know what to name it and Knockout.validation might be already taken.
+A small validation framework for knockout that's who!. Didn't know what to name it and Knockout.validation might be already taken.
 
 #Usage
 
