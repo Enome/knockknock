@@ -1,8 +1,16 @@
 # KnockKnock who's there?
 
-A small validation framework for knockout that's who! ( this sounded funnier in my head ). 
+A small validation framework for knockout that's who! ( this sounded funnier in my head ). Didn't know what to name it and Knockout.validation might be already taken.
 
-Didn't know what to name it and Knockout.validation might be already taken.
+#Usage
+
+Check the example.html file to find out how to use KnockKnock.
+
+#TODO
+
+ - Add more validators (only added 2 for testing)
+ - Create custom binding to add invalid and valid css class depending if isValid is true or false. Something like validCss: isValid.
+ - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
 
 #Run specs
 
@@ -27,13 +35,3 @@ For now I am just compiling my CoffeeScript files into JavaScript onces. In the 
 
     ./build.sh
 
-#Usage
-
-Check the example.html file to find out how to use KnockKnock.
-
-
-#TODO
-
- - Add more validators (only added 2 for testing)
- - Create custom binding to add invalid and valid css class depending if isValid is true or false. Something like validCss: isValid.
- - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
