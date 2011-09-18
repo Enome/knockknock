@@ -23,9 +23,17 @@ Jessie is based on Jasmine BDD but adds some extra features and sugar.
 
 #Build 
 
-For now I am just compiling my CoffeeScript files into JavaScript onces. In the future I will create one file for easy usage.
+For now I am just compiling my CoffeeScript files into JavaScript onces. In the future I will create one file for easy usage. To compile the src dir to the build dir run:
 
+    ./build.sh
 
 #Usage
 
 Check the example.html file to find out how to use KnockKnock.
+
+
+#TODO
+
+ - Add more validators (only added 2 for testing)
+ - Create custom binding to add invalid and valid css class depending if isValid is true or false. Something like validCss: isValid.
+ - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
