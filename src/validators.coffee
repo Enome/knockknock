@@ -1,13 +1,26 @@
-default_validators = require './default_validators'
+class Required
 
-class Validators
   constructor : ->
-    @validators = {}
+    @message = 'This field is required.'
 
-  add : (validator)->
-    @validators[validator.name] = validator
+  validate : (observable)->
+    value = ko.utils.stringTrim observable()
+    value? and value isnt ''
 
-  all : ->
-    @validators
 
-exports.Validators = Validators
+class Max
+
+  constructor : (@length)->
+    @message = "Please enter no more than #{@length} character(s)."
+
+  validate : (observable)->
+    value = ko.utils.stringTrim observable()
+    value.length <= @length
+
+
+window.validators =
+  Required : Required
+  Max : Max
+
+if module?
+  module.exports = window.validators

@@ -1,35 +1,36 @@
-Validators = require('./validators').Validators
-default_validators = require './default_validators'
-
 class Validation
 
   constructor : ->
-    @validators = new Validators
-    @loadDefaultValidators()
+
+    @cache = []
 
 
-  loadDefaultValidators : ->
+  addRules : (observable, validators...)->
 
-    for k, Validator of default_validators
-      validator = new Validator
-      @validators.add validator
-
-
-  addRules : (observable, rules)->
+    @cache.push
+      observable : observable
+      validators : validators
 
     observable.errors = ko.observableArray()
     observable.isValid = ko.dependentObservable ->
       observable.errors().length is 0
-    observable.subscribe => @subscription(observable, rules)
+    observable.subscribe => @_validate(observable, validators...)
     
 
-  subscription : (observable, rules)->
+  _validate : (observable, validators...)->
 
       observable.errors.removeAll()
-      for ruleKey, rule of rules
-        for validatorKey, validator of @validators.all()
-          if ruleKey is validatorKey and not validator.validate observable, rule
-            observable.errors.push validator.message
 
+      for validator in validators
+        if not validator.validate observable
+          observable.errors.push validator.message
 
-exports.Validation = Validation
+  validate : =>
+
+    for item in @cache
+      @_validate item.observable, item.validators...
+
+if exports?
+  exports.Validation = Validation
+
+window.Validation = Validation

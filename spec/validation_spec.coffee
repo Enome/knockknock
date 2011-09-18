@@ -1,32 +1,21 @@
-Validation         = require('../src/validation').Validation
-default_validators = require '../src/default_validators'
+Validation = require('../src/validation').Validation
+validators = require '../src/validators'
+Required   = validators.Required
+Max        = validators.Max
 
 
 describe 'Validation', ->
 
-
-  describe 'Default Validators', ->
-
-    it 'should load default validators', ->
-
-      validation = new Validation()
-      
-      for k, Validator of default_validators
-        validator = new Validator
-        expect(validation.validators.all()[validator.name]).toBeDefined()
-
-
-
   describe 'Add Rules', ->
 
-    somevalue = null
+    describe 'Validator without options', ->
 
-    describe 'Required', ->
+      somevalue = null
 
       beforeEach ->
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addRules somevalue, required:true
+        validation.addRules somevalue, new Required
 
 
       describe 'isValid', ->
@@ -57,7 +46,7 @@ describe 'Validation', ->
 
 
         it 'should have the required validator message', ->
-          required = new default_validators.Required()
+          required = new Required()
 
           somevalue ''
           somevalue.errors()[0].should_be required.message
@@ -72,12 +61,15 @@ describe 'Validation', ->
             somevalue.errors().length.should_be 0
 
 
-    describe 'Max', ->
+    describe 'Validator with options', ->
+
+      somevalue = null
 
       beforeEach ->
+
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addRules somevalue, max:5
+        validation.addRules somevalue, new Max 5
 
       describe 'isValid', ->
 
@@ -95,3 +87,96 @@ describe 'Validation', ->
 
           somevalue '123456'
           expect(somevalue.isValid()).toBeFalsy()
+  
+
+    describe 'Multiple validators', ->
+
+      somevalue = null
+
+      beforeEach ->
+
+        validation = new Validation()
+        somevalue = ko.observable()
+        validation.addRules somevalue, new Required, new Max 5
+
+      describe 'isValid', ->
+
+        it 'should be true with a string', ->
+
+          somevalue 'some'
+          expect(somevalue.isValid()).toBeTruthy()
+
+        it 'should be false with empty string', ->
+
+          somevalue ''
+          expect(somevalue.isValid()).toBeFalsy()
+
+        it 'should be true with a string with 5 chars', ->
+
+          somevalue '12345'
+          expect(somevalue.isValid()).toBeTruthy()
+
+        it 'should be true with a string with 3 chars', ->
+
+          somevalue '123'
+          expect(somevalue.isValid()).toBeTruthy()
+
+        it 'should be false with a string with 6 chars', ->
+
+          somevalue '123456'
+          expect(somevalue.isValid()).toBeFalsy()
+
+
+    describe 'Global validation', ->
+
+      validation = null
+      somevalue = null
+      othervalue = null
+      required = null
+      max = max
+
+      beforeEach ->
+
+        somevalue = ko.observable()
+        othervalue = ko.observable()
+
+        validation = new Validation()
+        required = new Required
+        max = new Max 3
+
+        validation.addRules somevalue, required
+        validation.addRules othervalue, max
+
+
+      describe 'cache', ->
+
+        it 'should have 2 items', ->
+
+          validation.cache.length.should_be 2
+
+        it 'should have somevalue as the first observable', ->
+
+          expect(validation.cache[0].observable).toEqual somevalue
+
+        it 'should have required as the first validators', ->
+
+          expect(validation.cache[0].validators).toEqual [required]
+
+        it 'should have othervalue as the second observable', ->
+
+          expect(validation.cache[1].observable).toEqual othervalue
+
+        it 'should have max as the second validators', ->
+
+          expect(validation.cache[1].validators).toEqual [max]
+
+
+      describe 'validate', ->
+
+        it 'should validate all observables in cache', ->
+        
+          validation._validate = jasmine.createSpy()
+          validation.validate()
+
+          for item in validation.cache
+            validation._validate.should_have_been_called_with item.observable, item.validators...
