@@ -25,17 +25,11 @@ class Validation
 
   subscription : (observable, rules)->
 
-      #throw new Error('Validator #{name} was not found')
       observable.errors.removeAll()
-
-      validators = @getValidators rules
-
-      for validator in validators
-        if validator.validate observable, rule
-          observable.errors.push validator.message
-
-  getValidators : (rules)->
-
+      for ruleKey, rule of rules
+        for validatorKey, validator of @validators.all()
+          if ruleKey is validatorKey and not validator.validate observable, rule
+            observable.errors.push validator.message
 
 
 exports.Validation = Validation

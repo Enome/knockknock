@@ -5,7 +5,7 @@ default_validators = require '../src/default_validators'
 describe 'Validation', ->
 
 
-  describe 'Validators', ->
+  describe 'Default Validators', ->
 
     it 'should load default validators', ->
 
@@ -14,15 +14,6 @@ describe 'Validation', ->
       for k, Validator of default_validators
         validator = new Validator
         expect(validation.validators.all()[validator.name]).toBeDefined()
-
-
-    it 'should throw an error if validator wasnt found', ->
-        validation = new Validation()
-        somevalue = ko.observable()
-
-        expect( ->
-          validation.addRules somevalue, somevalidator:true
-        ).toThrow()
 
 
 
