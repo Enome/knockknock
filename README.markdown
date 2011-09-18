@@ -12,12 +12,12 @@ First of all you need to have Node.js installed and npm.
 
 To install Jessie type:
 
-   npm install -g jessie
+    npm install -g jessie
 
 
 You can now run tests by typing in the root dir.
 
-  jessie spec 
+    jessie spec 
 
 Jessie is based on Jasmine BDD but adds some extra features and sugar.
 
