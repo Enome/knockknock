@@ -2,11 +2,30 @@
 
 A small validation framework for knockout that's who!. Didn't know what to name it and Knockout.validation might be already taken.
 
+
+#Example
+
+Check example.html for a complete example on how to use KnockKnock.
+
+
 #Usage
 
-#1 Create the validation object
+##Create the validation object.
   
     var validation = new validation();
+
+##Add one or more validators to an observable.
+
+    validation.addValidators(observable, validator);
+
+##Validate all the observables.
+
+    validation.validate()
+
+##Validation
+
+The observable now has a .isValid observable and .errors observableArray. Validation is run when observable changes or when you call the global validate method on the validation object.
+
 
 #TODO
 
