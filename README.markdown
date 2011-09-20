@@ -27,7 +27,6 @@ The observable now has an .isValid observable and .errors observableArray. Valid
 
 ##TODO
 
- - Create custom binding to add invalid and valid css class depending if isValid is true or false. Something like validCss: isValid.
  - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
 
 ##Run specs
