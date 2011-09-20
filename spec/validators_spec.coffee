@@ -1,9 +1,12 @@
 Max      = require('../src/validators').Max
 Required = require('../src/validators').Required
+Regex    = require('../src/validators').Regex
+
 
 describe 'Default Validators', ->
 
-  describe 'required', ->
+
+  describe 'Required', ->
 
     it 'should be true if observable is string', ->
 
@@ -28,7 +31,7 @@ describe 'Default Validators', ->
       expect(result).toBeFalsy()
 
 
-  describe 'max', ->
+  describe 'Max', ->
 
     it 'should be false if observable is > 2 chars long', ->
 
@@ -49,3 +52,21 @@ describe 'Default Validators', ->
 
       max = new Max 2
       max.message.should_be 'Please enter no more than 2 character(s).'
+
+
+  describe 'Regex', ->
+
+    it 'should be true if it matches the regex', ->
+
+      somevalue = ko.observable('lucifer/666')
+      rx = new Regex /[^/]+\d+/
+      result = rx.validate somevalue
+      expect(result).toBeTruthy()
+
+    
+    it 'should be true if string is empty', ->
+
+      somevalue = ko.observable('')
+      rx = new Regex /[^/]+\d+/
+      result = rx.validate somevalue
+      expect(result).toBeTruthy()
