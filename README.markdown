@@ -1,6 +1,6 @@
 # Knock knock who's there?
 
-A small validation framework for knockout that's who!. Didn't know what to name it and Knockout.validation might be already taken.
+A small validation framework for knockout that's who! Didn't know what to name it and Knockout.validation might be already taken.
 
 
 ##Example
@@ -20,7 +20,7 @@ You can find a demo [here](http://knockknock.ep.io/example.html) which is also i
 
 ###Validation
 
-The observable now has a .isValid observable and .errors observableArray. Validation is run when observable changes or when you call the global validate method on the validation object.
+The observable now has an .isValid observable and .errors observableArray. Validation is run when observable changes or when you call the global validate method on the validation object.
 
     validation.validate()
 
