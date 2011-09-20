@@ -3,37 +3,37 @@
 A small validation framework for knockout that's who!. Didn't know what to name it and Knockout.validation might be already taken.
 
 
-#Example
+##Example
 
 Check example.html for a complete example on how to use KnockKnock.
 
 
-#Usage
+##Usage
 
-##Create the validation object.
+###Create the validation object.
   
     var validation = new validation();
 
-##Add one or more validators to an observable.
+###Add one or more validators to an observable.
 
     validation.addValidators(observable, validator);
 
-##Validate all the observables.
+###Validate all the observables.
 
     validation.validate()
 
-##Validation
+###Validation
 
 The observable now has a .isValid observable and .errors observableArray. Validation is run when observable changes or when you call the global validate method on the validation object.
 
 
-#TODO
+##TODO
 
  - Add more validators (only added 2 for testing)
  - Create custom binding to add invalid and valid css class depending if isValid is true or false. Something like validCss: isValid.
  - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
 
-#Run specs
+##Run specs
 
 Rather than testing it in the browser KnockKnock  is build with CommonJs modules and tested with Node.js and Jessie. 
 
@@ -50,7 +50,7 @@ You can now run tests by typing in the root dir.
 
 Jessie is based on Jasmine BDD but adds some extra features and sugar.
 
-#Build 
+##Build 
 
 For now I am just compiling my CoffeeScript files into JavaScript onces. In the future I will create one file for easy usage. To compile the src dir to the build dir run:
 
