@@ -45,11 +45,15 @@ class Number extends Regex
 
 class Equals
 
-  constructor : ->
+  constructor : (@equalee)->
     @message = 'Your entry didn\'t match the other value.'
 
-  validate : (observable, equalee)->
-    observable() is equalee()
+  validate : (observable)->
+    if typeof @equalee is 'function'
+      observable() is @equalee()
+    else
+      observable() is value
+
 
 window.validators =
   Required : Required

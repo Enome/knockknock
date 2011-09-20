@@ -6,7 +6,7 @@ Max        = validators.Max
 
 describe 'Validation', ->
 
-  describe 'Add Rules', ->
+  describe 'Add Validator', ->
 
     describe 'Validator without options', ->
 
@@ -15,7 +15,7 @@ describe 'Validation', ->
       beforeEach ->
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addRules somevalue, new Required
+        validation.addValidator somevalue, new Required
 
 
       describe 'isValid', ->
@@ -69,7 +69,7 @@ describe 'Validation', ->
 
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addRules somevalue, new Max 5
+        validation.addValidator somevalue, new Max 5
 
       describe 'isValid', ->
 
@@ -97,7 +97,7 @@ describe 'Validation', ->
 
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addRules somevalue, new Required, new Max 5
+        validation.addValidator somevalue, new Required, new Max 5
 
       describe 'isValid', ->
 
@@ -144,8 +144,8 @@ describe 'Validation', ->
         required = new Required
         max = new Max 3
 
-        validation.addRules somevalue, required
-        validation.addRules othervalue, max
+        validation.addValidator somevalue, required
+        validation.addValidator othervalue, max
 
 
       describe 'cache', ->

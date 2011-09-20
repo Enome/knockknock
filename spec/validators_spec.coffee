@@ -115,24 +115,32 @@ describe 'Validators', ->
       
       somevalue = ko.observable 'somevalue'
       othervalue = ko.observable 'somevalue'
-      equal = new Equals
-      result = equal.validate somevalue, othervalue
+
+      equals = new Equals othervalue
+      result = equals.validate somevalue
       expect(result).toBeTruthy()
 
 
     it 'should be true if both integers are equal', ->
       
       somevalue = ko.observable 1
-      othervalue = ko.observable 1
-      equal = new Equals
-      result = equal.validate somevalue, othervalue
+      equals = new Equals 1
+      result = equals.validate somevalue
       expect(result).toBeTruthy()
 
 
     it 'should be false if both string are not equal', ->
       
       somevalue = ko.observable '5'
-      othervalue = ko.observable '2'
-      equal = new Equals
-      result = equal.validate somevalue, othervalue
+      equal = new Equals '2'
+      result = equal.validate somevalue
       expect(result).toBeFalsy()
+
+
+    it 'should be call the value if it\'s a function', ->
+      
+      somevalue = ko.observable '5'
+      othervalue = jasmine.createSpy()
+      equal = new Equals othervalue
+      result = equal.validate somevalue
+      othervalue.should_have_been_called()

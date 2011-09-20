@@ -5,7 +5,7 @@ class Validation
     @cache = []
 
 
-  addRules : (observable, validators...)->
+  addValidator : (observable, validators...)->
 
     @cache.push
       observable : observable
