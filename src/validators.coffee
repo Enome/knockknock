@@ -52,7 +52,7 @@ class Equals
     if typeof @equalee is 'function'
       observable() is @equalee()
     else
-      observable() is value
+      observable() is @equalee
 
 
 window.validators =

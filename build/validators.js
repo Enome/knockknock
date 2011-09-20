@@ -68,7 +68,7 @@
       if (typeof this.equalee === 'function') {
         return observable() === this.equalee();
       } else {
-        return observable() === value;
+        return observable() === this.equalee;
       }
     };
     return Equals;
