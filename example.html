@@ -23,6 +23,7 @@
         this.email    = ko.observable();
         this.number   = ko.observable();
         this.equals   = ko.observable();
+        this.combination = ko.observable();
 
         // Validation
         this.validation = new Validation();
@@ -33,6 +34,7 @@
         this.validation.addValidators( this.email, new Email() );
         this.validation.addValidators( this.number, new Number() );
         this.validation.addValidators( this.equals, new Equals( this.number ) );
+        this.validation.addValidators( this.combination, new Required(), new Email() );
 
       }; 
 
@@ -105,6 +107,14 @@
       <label>Equals: ( evaluated against Number )</label>
       <input type='text' data-bind='value: equals' />
       <ul data-bind='foreach: equals.errors'>
+        <li data-bind='text: $data'></li>
+      </ul>
+    </p>
+
+    <p>
+      <label>Required and Email:</label>
+      <input type='text' data-bind='value: combination' />
+      <ul data-bind='foreach: combination.errors'>
         <li data-bind='text: $data'></li>
       </ul>
     </p>
