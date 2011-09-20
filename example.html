@@ -27,12 +27,12 @@
         // Validation
         this.validation = new Validation();
 
-        this.validation.addValidator( this.required, new Required() );
-        this.validation.addValidator( this.max, new Max(5) );
-        this.validation.addValidator( this.regex, new Regex( /[^/]+\d+/ ) );
-        this.validation.addValidator( this.email, new Email() );
-        this.validation.addValidator( this.number, new Number() );
-        this.validation.addValidator( this.equals, new Equals( this.number ) );
+        this.validation.addValidators( this.required, new Required() );
+        this.validation.addValidators( this.max, new Max(5) );
+        this.validation.addValidators( this.regex, new Regex( /[^/]+\d+/ ) );
+        this.validation.addValidators( this.email, new Email() );
+        this.validation.addValidators( this.number, new Number() );
+        this.validation.addValidators( this.equals, new Equals( this.number ) );
 
       }; 
 

@@ -6,16 +6,16 @@ Max        = validators.Max
 
 describe 'Validation', ->
 
-  describe 'Add Validator', ->
+  describe 'Add Validators', ->
 
-    describe 'Validator without options', ->
+    describe 'Validators without options', ->
 
       somevalue = null
 
       beforeEach ->
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addValidator somevalue, new Required
+        validation.addValidators somevalue, new Required
 
 
       describe 'isValid', ->
@@ -61,7 +61,7 @@ describe 'Validation', ->
             somevalue.errors().length.should_be 0
 
 
-    describe 'Validator with options', ->
+    describe 'Validators with options', ->
 
       somevalue = null
 
@@ -69,7 +69,7 @@ describe 'Validation', ->
 
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addValidator somevalue, new Max 5
+        validation.addValidators somevalue, new Max 5
 
       describe 'isValid', ->
 
@@ -97,7 +97,7 @@ describe 'Validation', ->
 
         validation = new Validation()
         somevalue = ko.observable()
-        validation.addValidator somevalue, new Required, new Max 5
+        validation.addValidators somevalue, new Required, new Max 5
 
       describe 'isValid', ->
 
@@ -144,8 +144,8 @@ describe 'Validation', ->
         required = new Required
         max = new Max 3
 
-        validation.addValidator somevalue, required
-        validation.addValidator othervalue, max
+        validation.addValidators somevalue, required
+        validation.addValidators othervalue, max
 
 
       describe 'cache', ->

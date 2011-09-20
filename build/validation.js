@@ -5,7 +5,7 @@
     function Validation() {
       this.validate = __bind(this.validate, this);      this.cache = [];
     }
-    Validation.prototype.addValidator = function() {
+    Validation.prototype.addValidators = function() {
       var observable, validators;
       observable = arguments[0], validators = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       this.cache.push({

@@ -4,7 +4,9 @@ A small validation framework for knockout that's who!. Didn't know what to name 
 
 #Usage
 
-Check the example.html file to find out how to use KnockKnock.
+#1 Create the validation object
+  
+    var validation = new validation();
 
 #TODO
 
