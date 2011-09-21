@@ -3,6 +3,13 @@
 A small validation framework for knockout that's who! Didn't know what to name it and Knockout.validation might be already taken.
 
 
+##News/Changelog
+
+### 21 sep 2011
+
+You can now use the custom binding validateCss to add the invalid or valid class based on your observable. Check the example for usage.
+
+
 ##Example
 
 You can find a demo [here](http://knockknock.ep.io/example.html) which is also included in the repo (example.html).
