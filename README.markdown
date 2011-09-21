@@ -28,6 +28,7 @@ The observable now has an .isValid observable and .errors observableArray. Valid
 ##TODO
 
  - Create build process to compile and merge all the Coffee-Script files.
+ - Add some API sugar.
  - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
 
 ##Run specs
