@@ -1,9 +1,13 @@
 # Knock knock who's there?
 
-A small validation framework for knockout that's who! Didn't know what to name it and Knockout.validation might be already taken.
+A small validation framework for knockout that's who!
 
 
 ##News/Changelog
+
+### 22 sep 2011
+
+You can now define validation rules by passing a configuration object and viewmodel to the validation constructor. The example for this new syntax can be found in example\_short.html. 
 
 ### 21 sep 2011
 
@@ -12,7 +16,7 @@ You can now use the custom binding validateCss to add the invalid or valid class
 
 ##Example
 
-You can find a demo [here](http://knockknock.ep.io/example.html) which is also included in the repo (example.html).
+You can find a demo [here](http://knockknock.ep.io/example.html) and [here](http://knockknock.ep.io/example_short.html) which is also included in the repo (example.html).
 
 
 ##Usage
@@ -34,8 +38,7 @@ The observable now has an .isValid observable and .errors observableArray. Valid
 
 ##TODO
 
- - Add some API sugar.
- - Research the new extend systax in 1.3: http://groups.google.com/group/knockoutjs/msg/3289474946c2675b 
+  - Throw a few errors around when stuff is missing. Like forgetting to pass the viewmodel to the constructor.
 
 ##Run specs
 
