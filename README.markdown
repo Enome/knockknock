@@ -16,7 +16,7 @@ You can now use the custom binding validateCss to add the invalid or valid class
 
 ##Example
 
-You can find a demo [here](http://knockknock.ep.io/example.html) and [here](http://knockknock.ep.io/example_short.html) which is also included in the repo (example.html).
+You can find a demo [here](http://knockknock.ep.io/example.html) and [here](http://knockknock.ep.io/example_short.html) which are also included in the project.
 
 
 ##Usage
