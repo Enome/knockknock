@@ -2,6 +2,7 @@ Validation = require('../src/validation').Validation
 validators = require '../src/validators'
 Required   = validators.Required
 Max        = validators.Max
+Email      = validators.Email
 
 
 describe 'Validation', ->
@@ -180,3 +181,36 @@ describe 'Validation', ->
 
           for item in validation.cache
             validation._validate.should_have_been_called_with item.observable, item.validators...
+
+
+  describe 'Setup configuration with constructor', ->
+
+    describe 'Process configuration', ->
+
+      beforeEach ->
+        Validation.prototype.addValidators = jasmine.createSpy()
+
+      it 'should add many validators to somevalue observable', ->
+
+        viewmodel =
+          somevalue : ko.observable()
+
+        config =
+          somevalue : [ new Required, new Email ]
+
+        validation = new Validation config, viewmodel
+
+        validation.addValidators.should_have_been_called_with viewmodel.somevalue, config.somevalue...
+
+
+      it 'should add one validator to othervalue observable', ->
+
+        viewmodel =
+          othervalue : ko.observable()
+
+        config =
+          othervalue : new Max 5555
+
+        validation = new Validation config, viewmodel
+
+        validation.addValidators.should_have_been_called_with viewmodel.othervalue, config.othervalue

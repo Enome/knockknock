@@ -1,8 +1,17 @@
 class Validation
 
-  constructor : ->
+  constructor : (configuration, viewmodel)->
 
     @cache = []
+
+    if configuration?
+      for key, settings of configuration
+
+        if not ko.utils.isArray configuration[key]
+          @addValidators viewmodel[key], configuration[key]
+
+        else
+          @addValidators viewmodel[key], configuration[key]...
 
 
   addValidators : (observable, validators...)->
@@ -17,6 +26,12 @@ class Validation
     observable.subscribe => @_validate(observable, validators...)
     
 
+  validate : =>
+
+    for item in @cache
+      @_validate item.observable, item.validators...
+
+
   _validate : (observable, validators...)->
 
       observable.errors.removeAll()
@@ -25,10 +40,6 @@ class Validation
         if not validator.validate observable
           observable.errors.push validator.message
 
-  validate : =>
-
-    for item in @cache
-      @_validate item.observable, item.validators...
 
 if exports?
   exports.Validation = Validation

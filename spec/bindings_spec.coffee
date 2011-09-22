@@ -13,7 +13,6 @@ describe 'Custom bindings', ->
 
         ko.bindingHandlers.validateCss.init element, valueAccessor
         element.className.should_be 'invalid'
-        console.log element.className
 
       it 'should add valid if observable is valid', ->
 
@@ -24,7 +23,6 @@ describe 'Custom bindings', ->
 
         ko.bindingHandlers.validateCss.init element, valueAccessor
         element.className.should_be 'valid'
-        console.log element.className
 
       it 'should remove invalid and add valid if observable is valid and keep all other classes', ->
 

@@ -88,9 +88,24 @@ ko.utils.removeClass = function(element, className) {
   regex = new RegExp("(?:^|\\s)" + className + "(?!\\S)");
   return element.className = element.className.replace(regex, '');
 };
+ko.utils.isArray = function(obj) {
+  return Object.prototype.toString.call(obj) === '[object Array]';
+};
 Validation = (function() {
-  function Validation() {
-    this.validate = __bind(this.validate, this);    this.cache = [];
+  function Validation(configuration, viewmodel) {
+    this.validate = __bind(this.validate, this);
+    var key, settings;
+    this.cache = [];
+    if (configuration != null) {
+      for (key in configuration) {
+        settings = configuration[key];
+        if (!ko.utils.isArray(configuration[key])) {
+          this.addValidators(viewmodel[key], configuration[key]);
+        } else {
+          this.addValidators.apply(this, [viewmodel[key]].concat(__slice.call(configuration[key])));
+        }
+      }
+    }
   }
   Validation.prototype.addValidators = function() {
     var observable, validators;
@@ -107,6 +122,16 @@ Validation = (function() {
       return this._validate.apply(this, [observable].concat(__slice.call(validators)));
     }, this));
   };
+  Validation.prototype.validate = function() {
+    var item, _i, _len, _ref, _results;
+    _ref = this.cache;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      item = _ref[_i];
+      _results.push(this._validate.apply(this, [item.observable].concat(__slice.call(item.validators))));
+    }
+    return _results;
+  };
   Validation.prototype._validate = function() {
     var observable, validator, validators, _i, _len, _results;
     observable = arguments[0], validators = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -115,16 +140,6 @@ Validation = (function() {
     for (_i = 0, _len = validators.length; _i < _len; _i++) {
       validator = validators[_i];
       _results.push(!validator.validate(observable) ? observable.errors.push(validator.message) : void 0);
-    }
-    return _results;
-  };
-  Validation.prototype.validate = function() {
-    var item, _i, _len, _ref, _results;
-    _ref = this.cache;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      item = _ref[_i];
-      _results.push(this._validate.apply(this, [item.observable].concat(__slice.call(item.validators))));
     }
     return _results;
   };

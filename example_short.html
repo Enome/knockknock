@@ -25,15 +25,16 @@
         this.combination = ko.observable();
 
         // Validation
-        this.validation = new Validation();
+        this.validation = new Validation({
+          required : new Required(),
+          max      : new Max(5),
+          regex    : new Regex( /[^/]+\d+/ ),
+          email    : new Email(),
+          number   : new Number(),
+          equals   : new Equals( this.number ),
+          combination : [ new Required(), new Email() ]
+        }, this );
 
-        this.validation.addValidators( this.required, new Required() );
-        this.validation.addValidators( this.max, new Max(5) );
-        this.validation.addValidators( this.regex, new Regex( /[^/]+\d+/ ) );
-        this.validation.addValidators( this.email, new Email() );
-        this.validation.addValidators( this.number, new Number() );
-        this.validation.addValidators( this.equals, new Equals( this.number ) );
-        this.validation.addValidators( this.combination, new Required(), new Email() );
 
       }; 
 
@@ -67,10 +68,6 @@
 
     <p>
       For more information check out: <a href='http://github.com/Enome/knockknock'>knockknock on Github</a>.
-    </p>
-
-    <p>
-      This example uses addValidators directly which might be useful. Check out example_short.html for a shorter syntax to define validation rules onto an observable.
     </p>
 
     <p>
