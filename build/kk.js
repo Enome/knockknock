@@ -13,6 +13,9 @@ Required = (function() {
   }
   Required.prototype.validate = function(observable) {
     var value;
+    if (typeof observable() === 'number') {
+      return true;
+    }
     value = ko.utils.stringTrim(observable());
     return (value != null) && value !== '';
   };
