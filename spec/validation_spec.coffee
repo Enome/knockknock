@@ -183,6 +183,18 @@ describe 'Validation', ->
             validation._validate.should_have_been_called_with item.observable, item.validators...
 
 
+        it 'should return true', ->
+          somevalue 'somevalue'
+          othervalue '123'
+          expect(validation.validate()).toBeTruthy()
+
+
+        it 'should return false', ->
+          somevalue ''
+          othervalue '1234'
+          expect(validation.validate()).toBeFalsy()
+
+
   describe 'Setup configuration with constructor', ->
 
     describe 'Process configuration', ->

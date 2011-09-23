@@ -28,8 +28,14 @@ class Validation
 
   validate : =>
 
+    errors = []
+
     for item in @cache
       @_validate item.observable, item.validators...
+      errors.push item.observable.errors()
+
+    errors = [].concat errors...
+    errors.length is 0
 
 
   _validate : (observable, validators...)->
