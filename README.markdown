@@ -5,6 +5,10 @@ A small validation framework for knockout that's who!
 
 ##News/Changelog
 
+### 23 sep 2011
+
+Feature: set error messages. Check out [issue#2](https://github.com/Enome/knockknock/issues/2) for more information.
+
 ### 22 sep 2011
 
 You can now define validation rules by passing a configuration object and viewmodel to the validation constructor. The example for this new syntax can be found in example\_short.html. 
@@ -14,9 +18,11 @@ You can now define validation rules by passing a configuration object and viewmo
 You can now use the custom binding validateCss to add the invalid or valid class based on your observable. Check the example for usage.
 
 
-##Example
+##Demos/Examples
 
-You can find a demo [here](http://knockknock.ep.io/example.html) and [here](http://knockknock.ep.io/example_short.html) which are also included in the project.
+[example.html](http://knockknock.ep.io/example.html)
+[example\_short.html](http://knockknock.ep.io/example_short.html)
+[example\_custom\_errors.html](http://knockknock.ep.io/example_custom_errors.html)
 
 
 ##Usage
