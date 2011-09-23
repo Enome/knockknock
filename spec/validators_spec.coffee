@@ -35,6 +35,14 @@ describe 'Validators', ->
       expect(result).toBeFalsy()
 
 
+    it 'should be true if observable is a number', ->
+      
+      somevalue = ko.observable 666
+      required = new Required()
+      result = required.validate somevalue
+      expect(result).toBeTruthy()
+
+
     it 'should have the custom validation message', ->
 
       validator = new Required 'This is a very custom message.'

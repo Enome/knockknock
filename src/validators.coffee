@@ -4,6 +4,10 @@ class Required
     @message = message or 'This field is required.'
 
   validate : (observable)->
+
+    if typeof observable() is 'number'
+      return true
+
     value = ko.utils.stringTrim observable()
     value? and value isnt ''
 
