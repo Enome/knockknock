@@ -75,6 +75,14 @@ describe 'Validators', ->
       max.message.should_be 'Please enter no more than 2 character(s).'
 
 
+    it 'should be true if observable is a number', ->
+      
+      somevalue = ko.observable 666
+      max = new Max 5
+      result = max.validate somevalue
+      expect(result).toBeTruthy()
+
+
     it 'should have the custom validation message', ->
 
       validator = new Max 2, 'This is a very custom message.'
@@ -96,6 +104,14 @@ describe 'Validators', ->
     it 'should be true if string is empty', ->
 
       somevalue = ko.observable('')
+      rx = new Regex /[^/]+\d+/
+      result = rx.validate somevalue
+      expect(result).toBeTruthy()
+
+
+    it 'should be true if observable is a number', ->
+      
+      somevalue = ko.observable 666
       rx = new Regex /[^/]+\d+/
       result = rx.validate somevalue
       expect(result).toBeTruthy()

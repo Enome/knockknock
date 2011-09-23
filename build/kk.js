@@ -28,7 +28,7 @@ Max = (function() {
   }
   Max.prototype.validate = function(observable) {
     var value;
-    value = ko.utils.stringTrim(observable());
+    value = ko.utils.stringTrim(observable().toString());
     return value.length <= this.length;
   };
   return Max;
@@ -40,7 +40,7 @@ Regex = (function() {
   }
   Regex.prototype.validate = function(observable) {
     var value;
-    value = ko.utils.stringTrim(observable());
+    value = ko.utils.stringTrim(observable().toString());
     return value === '' || this.rx.test(observable());
   };
   return Regex;

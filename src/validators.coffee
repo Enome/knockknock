@@ -18,7 +18,8 @@ class Max
     @message = message or "Please enter no more than #{@length} character(s)."
 
   validate : (observable)->
-    value = ko.utils.stringTrim observable()
+
+    value = ko.utils.stringTrim observable().toString()
     value.length <= @length
 
 
@@ -28,7 +29,8 @@ class Regex
     @message = message or 'Your entry didn\'t match the pattern.'
 
   validate : (observable)->
-    value = ko.utils.stringTrim observable()
+
+    value = ko.utils.stringTrim observable().toString()
     value is '' or @rx.test observable()
 
 
