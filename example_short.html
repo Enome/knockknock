@@ -66,68 +66,27 @@
   </head>
   <body>
 
-    <h1>Knock-knock Validation: Example</h1>
+    <h1>Knock-knock Validation: Short Example</h1>
 
     <p>
       For more information check out: <a href='http://github.com/Enome/knockknock'>knockknock on Github</a>.
     </p>
 
-    <p>
-      <label>Required:</label>
-      <input type='text' data-bind='value: required, validateCss: required' />
-      <ul data-bind='foreach: required.errors'>
+    <script type='text/html' id='FormItem'>
+      <label data-bind='text: name'></label>
+      <input type='text' data-bind='value: $data.field, validateCss: $data.field' />
+      <ul data-bind='foreach: $data.field.errors'>
         <li data-bind='text: $data'></li>
       </ul>
-    </p>
+    </script>
 
-    <p>
-      <label>Max: 5</label>
-      <input type='text' data-bind='value: max, validateCss: max' />
-      <ul data-bind='foreach: max.errors'>
-        <li data-bind='text: $data'></li>
-      </ul>
-    </p>
-
-    <p>
-      <label>Regex: [^/]+\d+</label>
-      <input type='text' data-bind='value: regex, validateCss: regex' />
-      <ul data-bind='foreach: regex.errors'>
-        <li data-bind='text: $data'></li>
-      </ul>
-    </p>
-
-    <p>
-      <label>Email:</label>
-      <input type='text' data-bind='value: email, validateCss: email' />
-      <ul data-bind='foreach: email.errors'>
-        <li data-bind='text: $data'></li>
-      </ul>
-    </p>
-
-    <p>
-      <label>Number:</label>
-      <input type='text' data-bind='value: number, validateCss: number' />
-      <ul data-bind='foreach: number.errors'>
-        <li data-bind='text: $data'></li>
-      </ul>
-    </p>
-
-
-    <p>
-      <label>Equals: ( evaluated against Number )</label>
-      <input type='text' data-bind='value: equals, validateCss: equals' />
-      <ul data-bind='foreach: equals.errors'>
-        <li data-bind='text: $data'></li>
-      </ul>
-    </p>
-
-    <p>
-      <label>Required and Email:</label>
-      <input type='text' data-bind='value: combination, validateCss: combination' />
-      <ul data-bind='foreach: combination.errors'>
-        <li data-bind='text: $data'></li>
-      </ul>
-    </p>
+    <p data-bind='template: { name : "FormItem", data : { field : required, name : "Required" } }'></p>
+    <p data-bind='template: { name : "FormItem", data : { field : max, name : "Max" } }'></p>
+    <p data-bind='template: { name : "FormItem", data : { field : regex, name : "Regex" } }'></p>
+    <p data-bind='template: { name : "FormItem", data : { field : email, name : "Email" } }'></p>
+    <p data-bind='template: { name : "FormItem", data : { field : number, name : "Number" } }'></p>
+    <p data-bind='template: { name : "FormItem", data : { field : equals, name : "Equals ( evaluated against Number ) " } }'></p>
+    <p data-bind='template: { name : "FormItem", data : { field : combination, name : "Required and Email" } }'></p>
 
     <p>
       <button data-bind='click: validate'>Validate</button>
