@@ -49,7 +49,6 @@ The observable now has an .isValid observable and .errors observableArray. Valid
 ##TODO
 
  - Throw a few errors around when stuff is missing. Like forgetting to pass the viewmodel to the constructor.
- - Implement a way so that error messages can be easily overwritten.
 
 ##Run specs
 
