@@ -19,7 +19,7 @@ class Max
 
   validate : (observable)->
 
-    value = ko.utils.stringTrim observable().toString()
+    value = ko.utils.stringTrim observable()?.toString()
     value.length <= @length
 
 
@@ -30,7 +30,7 @@ class Regex
 
   validate : (observable)->
 
-    value = ko.utils.stringTrim observable().toString()
+    value = ko.utils.stringTrim observable()?.toString()
     value is '' or @rx.test observable()
 
 

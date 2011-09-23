@@ -27,8 +27,8 @@ Max = (function() {
     this.message = message || ("Please enter no more than " + this.length + " character(s).");
   }
   Max.prototype.validate = function(observable) {
-    var value;
-    value = ko.utils.stringTrim(observable().toString());
+    var value, _ref;
+    value = ko.utils.stringTrim((_ref = observable()) != null ? _ref.toString() : void 0);
     return value.length <= this.length;
   };
   return Max;
@@ -39,8 +39,8 @@ Regex = (function() {
     this.message = message || 'Your entry didn\'t match the pattern.';
   }
   Regex.prototype.validate = function(observable) {
-    var value;
-    value = ko.utils.stringTrim(observable().toString());
+    var value, _ref;
+    value = ko.utils.stringTrim((_ref = observable()) != null ? _ref.toString() : void 0);
     return value === '' || this.rx.test(observable());
   };
   return Regex;

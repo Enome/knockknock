@@ -43,6 +43,14 @@ describe 'Validators', ->
       expect(result).toBeTruthy()
 
 
+    it 'should be false if observable is a undefined', ->
+      
+      somevalue = ko.observable undefined
+      required = new Required()
+      result = required.validate somevalue
+      expect(result).toBeFalsy()
+
+
     it 'should have the custom validation message', ->
 
       validator = new Required 'This is a very custom message.'
@@ -83,6 +91,14 @@ describe 'Validators', ->
       expect(result).toBeTruthy()
 
 
+    it 'should be true if observable is a undefined', ->
+      
+      somevalue = ko.observable undefined
+      max = new Max 5
+      result = max.validate somevalue
+      expect(result).toBeTruthy()
+
+
     it 'should have the custom validation message', ->
 
       validator = new Max 2, 'This is a very custom message.'
@@ -112,6 +128,14 @@ describe 'Validators', ->
     it 'should be true if observable is a number', ->
       
       somevalue = ko.observable 666
+      rx = new Regex /[^/]+\d+/
+      result = rx.validate somevalue
+      expect(result).toBeTruthy()
+
+
+    it 'should be true if observable is a undefined', ->
+      
+      somevalue = ko.observable undefined
       rx = new Regex /[^/]+\d+/
       result = rx.validate somevalue
       expect(result).toBeTruthy()
