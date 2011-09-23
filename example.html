@@ -38,7 +38,9 @@
       }; 
 
       ViewModel.prototype.validate = function(){
-        this.validation.validate(); 
+        if( this.validation.validate() ){
+          alert('Do ajaxy stuff');
+        };
       };
 
       window.onload = function(){
