@@ -123,14 +123,16 @@ Validation = (function() {
     }, this));
   };
   Validation.prototype.validate = function() {
-    var item, _i, _len, _ref, _results;
+    var errors, item, _i, _len, _ref, _ref2;
+    errors = [];
     _ref = this.cache;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       item = _ref[_i];
-      _results.push(this._validate.apply(this, [item.observable].concat(__slice.call(item.validators))));
+      this._validate.apply(this, [item.observable].concat(__slice.call(item.validators)));
+      errors.push(item.observable.errors());
     }
-    return _results;
+    errors = (_ref2 = []).concat.apply(_ref2, errors);
+    return errors.length === 0;
   };
   Validation.prototype._validate = function() {
     var observable, validator, validators, _i, _len, _results;
