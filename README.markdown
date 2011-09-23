@@ -7,7 +7,11 @@ A small validation framework for knockout that's who!
 
 ### 23 sep 2011
 
-Feature: set error messages. Check out [issue#2](https://github.com/Enome/knockknock/issues/2) for more information.
+Validation.validate now returns true or false depending if there are errors. Check out [issue4](https://github.com/Enome/knockknock/issues/4) for more info.
+
+### 23 sep 2011
+
+Feature: set error messages. Check out [issue2](https://github.com/Enome/knockknock/issues/2) for more information.
 
 ### 22 sep 2011
 
@@ -45,7 +49,6 @@ The observable now has an .isValid observable and .errors observableArray. Valid
 ##TODO
 
  - Throw a few errors around when stuff is missing. Like forgetting to pass the viewmodel to the constructor.
- - Implement a way so that error messages can be easily overwritten.
 
 ##Run specs
 
