@@ -35,6 +35,13 @@ describe 'Validators', ->
       expect(result).toBeFalsy()
 
 
+    it 'should have the custom validation message', ->
+
+      validator = new Required 'This is a very custom message.'
+      validator.message.should_be 'This is a very custom message.'
+
+
+
   describe 'Max', ->
 
 
@@ -53,10 +60,18 @@ describe 'Validators', ->
       result = max.validate somevalue
       expect(result).toBeTruthy()
 
+
     it 'should have the correct error message', ->
 
       max = new Max 2
       max.message.should_be 'Please enter no more than 2 character(s).'
+
+
+    it 'should have the custom validation message', ->
+
+      validator = new Max 2, 'This is a very custom message.'
+      validator.message.should_be 'This is a very custom message.'
+
 
 
   describe 'Regex', ->
@@ -78,6 +93,12 @@ describe 'Validators', ->
       expect(result).toBeTruthy()
 
 
+    it 'should have the custom validation message', ->
+
+      validator = new Regex /[^/]+\d+/, 'This is a very custom message.'
+      validator.message.should_be 'This is a very custom message.'
+
+
   describe 'Email', ->
 
 
@@ -97,6 +118,12 @@ describe 'Validators', ->
       expect(result).toBeFalsy()
 
 
+    it 'should have the custom validation message', ->
+
+      validator = new Email 'This is a very custom message.'
+      validator.message.should_be 'This is a very custom message.'
+
+
   describe 'Number', ->
 
 
@@ -106,6 +133,12 @@ describe 'Validators', ->
       number = new Number
       result = number.validate somevalue
       expect(result).toBeTruthy()
+
+
+    it 'should have the custom validation message', ->
+
+      validator = new Number 'This is a very custom message.'
+      validator.message.should_be 'This is a very custom message.'
 
 
   describe 'Equals', ->
@@ -144,3 +177,9 @@ describe 'Validators', ->
       equal = new Equals othervalue
       result = equal.validate somevalue
       othervalue.should_have_been_called()
+
+
+    it 'should have the custom validation message', ->
+
+      validator = new Equals {}, 'This is a very custom message.'
+      validator.message.should_be 'This is a very custom message.'
