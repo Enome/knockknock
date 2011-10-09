@@ -15,8 +15,7 @@ describe 'Validation', ->
 
       beforeEach ->
         validation = new Validation()
-        somevalue = ko.observable()
-        validation.addValidators somevalue, new Required
+        somevalue = validation.addValidators ko.observable(), new Required
 
 
       describe 'isValid', ->
@@ -32,6 +31,7 @@ describe 'Validation', ->
           expect(somevalue.isValid()).toBeFalsy()
 
 
+      ###
       describe 'Errors', ->
 
         it 'should have one item', ->

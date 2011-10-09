@@ -16,15 +16,38 @@ class Validation
 
   addValidators : (observable, validators...)->
 
+    errors = ko.observableArray()
+    isValid = ko.dependentObservable ->
+      errors().length is 0
+
+    interceptor = ko.dependentObservable
+      read : observable
+      write : (value)->
+
+        errors.removeAll()
+        observable value
+
+
     @cache.push
-      observable : observable
+      observable : interceptor
       validators : validators
 
-    observable.errors = ko.observableArray()
-    observable.isValid = ko.dependentObservable ->
-      observable.errors().length is 0
-    observable.subscribe => @_validate(observable, validators...)
+    interceptor.errors = ko.observableArray()
+    interceptor.isValid = ko.dependentObservable ->
+      interceptor.errors().length is 0
+    interceptor.subscribe => @_validate(interceptor, validators...)
+
+    interceptor
     
+
+  _validate : (observable, validators...)->
+
+      observable.errors.removeAll()
+
+      for validator in validators
+        if not validator.validate observable
+          observable.errors.push validator.message
+
 
   validate : =>
 
@@ -36,15 +59,6 @@ class Validation
 
     errors = [].concat errors...
     errors.length is 0
-
-
-  _validate : (observable, validators...)->
-
-      observable.errors.removeAll()
-
-      for validator in validators
-        if not validator.validate observable
-          observable.errors.push validator.message
 
 
 if exports?

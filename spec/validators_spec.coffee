@@ -12,40 +12,40 @@ describe 'Validators', ->
   describe 'Required', ->
 
 
-    it 'should be true if observable is string', ->
+    it 'should be true if value is string', ->
 
-      somevalue = ko.observable 'Somevalue'
+      somevalue = 'Somevalue'
       required = new Required()
       result = required.validate somevalue
       expect(result).toBeTruthy()
 
 
-    it 'should be false if observable is empty string', ->
+    it 'should be false if value is empty string', ->
       
-      somevalue = ko.observable()
+      somevalue = ''
       required = new Required()
       result = required.validate somevalue
       expect(result).toBeFalsy()
 
-    it 'should be false if observable is a string with spaces', ->
+    it 'should be false if value is a string with spaces', ->
       
-      somevalue = ko.observable '   '
+      somevalue = '   '
       required = new Required()
       result = required.validate somevalue
       expect(result).toBeFalsy()
 
 
-    it 'should be true if observable is a number', ->
+    it 'should be true if value is a number', ->
       
-      somevalue = ko.observable 666
+      somevalue = 666
       required = new Required()
       result = required.validate somevalue
       expect(result).toBeTruthy()
 
 
-    it 'should be false if observable is a undefined', ->
+    it 'should be false if value is a undefined', ->
       
-      somevalue = ko.observable undefined
+      somevalue = undefined
       required = new Required()
       result = required.validate somevalue
       expect(result).toBeFalsy()
@@ -61,17 +61,17 @@ describe 'Validators', ->
   describe 'Max', ->
 
 
-    it 'should be false if observable is > 2 chars long', ->
+    it 'should be false if value is > 2 chars long', ->
 
-      somevalue = ko.observable 'somevalue'
+      somevalue = 'somevalue'
       max = new Max 2
       result = max.validate somevalue
       expect(result).toBeFalsy()
 
 
-    it 'should be true if observable is <= 2 chars long', ->
+    it 'should be true if value is <= 2 chars long', ->
 
-      somevalue = ko.observable 's'
+      somevalue = 's'
       max = new Max 2
       result = max.validate somevalue
       expect(result).toBeTruthy()
@@ -83,17 +83,17 @@ describe 'Validators', ->
       max.message.should_be 'Please enter no more than 2 character(s).'
 
 
-    it 'should be true if observable is a number', ->
+    it 'should be true if value is a number', ->
       
-      somevalue = ko.observable 666
+      somevalue = 666
       max = new Max 5
       result = max.validate somevalue
       expect(result).toBeTruthy()
 
 
-    it 'should be true if observable is a undefined', ->
+    it 'should be true if value is a undefined', ->
       
-      somevalue = ko.observable undefined
+      somevalue = undefined
       max = new Max 5
       result = max.validate somevalue
       expect(result).toBeTruthy()
@@ -111,7 +111,7 @@ describe 'Validators', ->
 
     it 'should be true if it matches the regex', ->
 
-      somevalue = ko.observable 'lucifer/666'
+      somevalue = 'lucifer/666'
       rx = new Regex /[^/]+\d+/
       result = rx.validate somevalue
       expect(result).toBeTruthy()
@@ -119,23 +119,23 @@ describe 'Validators', ->
     
     it 'should be true if string is empty', ->
 
-      somevalue = ko.observable('')
+      somevalue = ''
       rx = new Regex /[^/]+\d+/
       result = rx.validate somevalue
       expect(result).toBeTruthy()
 
 
-    it 'should be true if observable is a number', ->
+    it 'should be true if value is a number', ->
       
-      somevalue = ko.observable 666
+      somevalue = 666
       rx = new Regex /[^/]+\d+/
       result = rx.validate somevalue
       expect(result).toBeTruthy()
 
 
-    it 'should be true if observable is a undefined', ->
+    it 'should be true if value is a undefined', ->
       
-      somevalue = ko.observable undefined
+      somevalue = undefined
       rx = new Regex /[^/]+\d+/
       result = rx.validate somevalue
       expect(result).toBeTruthy()
@@ -152,7 +152,7 @@ describe 'Validators', ->
 
     it 'should be true with a valid email', ->
 
-      somevalue = ko.observable 'info@enome.be'
+      somevalue = 'info@enome.be'
       email = new Email
       result = email.validate somevalue
       expect(result).toBeTruthy()
@@ -160,7 +160,7 @@ describe 'Validators', ->
 
     it 'should be false with an invalid email', ->
 
-      somevalue = ko.observable 'infoenomebe'
+      somevalue = 'infoenomebe'
       email = new Email
       result = email.validate somevalue
       expect(result).toBeFalsy()
@@ -177,7 +177,7 @@ describe 'Validators', ->
 
     it 'should be true with a valid number: 1 1.0 1,000.00 -1 -1.0 ... ', ->
       
-      somevalue = ko.observable '1.00'
+      somevalue = '1.00'
       number = new Number
       result = number.validate somevalue
       expect(result).toBeTruthy()
@@ -194,8 +194,8 @@ describe 'Validators', ->
 
     it 'should be true if both strings are equal', ->
       
-      somevalue = ko.observable 'somevalue'
-      othervalue = ko.observable 'somevalue'
+      somevalue = 'somevalue'
+      othervalue = 'somevalue'
 
       equals = new Equals othervalue
       result = equals.validate somevalue
@@ -204,7 +204,7 @@ describe 'Validators', ->
 
     it 'should be true if both integers are equal', ->
       
-      somevalue = ko.observable 1
+      somevalue = 1
       equals = new Equals 1
       result = equals.validate somevalue
       expect(result).toBeTruthy()
@@ -212,7 +212,7 @@ describe 'Validators', ->
 
     it 'should be false if both string are not equal', ->
       
-      somevalue = ko.observable '5'
+      somevalue = '5'
       equal = new Equals '2'
       result = equal.validate somevalue
       expect(result).toBeFalsy()
@@ -220,7 +220,7 @@ describe 'Validators', ->
 
     it 'should be call the value if it\'s a function', ->
       
-      somevalue = ko.observable '5'
+      somevalue = '5'
       othervalue = jasmine.createSpy()
       equal = new Equals othervalue
       result = equal.validate somevalue

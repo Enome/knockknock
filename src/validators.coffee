@@ -3,12 +3,12 @@ class Required
   constructor : (message)->
     @message = message or 'This field is required.'
 
-  validate : (observable)->
+  validate : (value)->
 
-    if typeof observable() is 'number'
+    if typeof value is 'number'
       return true
 
-    value = ko.utils.stringTrim observable()
+    value = ko.utils.stringTrim value
     value? and value isnt ''
 
 
@@ -17,9 +17,9 @@ class Max
   constructor : (@length, message)->
     @message = message or "Please enter no more than #{@length} character(s)."
 
-  validate : (observable)->
+  validate : (value)->
 
-    value = ko.utils.stringTrim observable()?.toString()
+    value = ko.utils.stringTrim value?.toString()
     value.length <= @length
 
 
@@ -28,10 +28,10 @@ class Regex
   constructor : (@rx, message)->
     @message = message or 'Your entry didn\'t match the pattern.'
 
-  validate : (observable)->
+  validate : (value)->
 
-    value = ko.utils.stringTrim observable()?.toString()
-    value is '' or @rx.test observable()
+    value = ko.utils.stringTrim value?.toString()
+    value is '' or @rx.test value
 
 
 class Email extends Regex
@@ -54,11 +54,11 @@ class Equals
   constructor : (@equalee, message)->
     @message = message or 'Your entry didn\'t match the other value.'
 
-  validate : (observable)->
+  validate : (value)->
     if typeof @equalee is 'function'
-      observable() is @equalee()
+      value is @equalee()
     else
-      observable() is @equalee
+      value is @equalee
 
 
 window.validators =
