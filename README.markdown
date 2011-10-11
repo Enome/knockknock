@@ -1,13 +1,12 @@
-# Knock knock who's there?
+# Knock-Knock who's there?
 
 A small validation framework for knockout that's who!
 
 
-##Demos/Examples
+##Examples
 
 [example.html](http://knockknock.ep.io/example.html)
-[example\_short.html](http://knockknock.ep.io/example_short.html)
-[example\_custom\_errors.html](http://knockknock.ep.io/example_custom_errors.html)
+[example\_advanced.html](http://knockknock.ep.io/example_advanced.html)
 
 
 ##Usage
