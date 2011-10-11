@@ -18,6 +18,8 @@
 
       var ViewModel = function(){
 
+        this.number = ko.observable()
+
         this.validation = new Validation( this, {
 
           required    : new Required(),
