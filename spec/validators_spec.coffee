@@ -1,9 +1,11 @@
-Max      = require('../src/validators').Max
-Required = require('../src/validators').Required
-Regex    = require('../src/validators').Regex
-Email    = require('../src/validators').Email
-Number   = require('../src/validators').Number
-Equals   = require('../src/validators').Equals
+validators = kk.validators
+
+Max      = validators.Max
+Required = validators.Required
+Regex    = validators.Regex
+Email    = validators.Email
+Number   = validators.Number
+Equals   = validators.Equals
 
 
 describe 'Validators', ->

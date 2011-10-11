@@ -11,12 +11,11 @@ Required = (function() {
   function Required(message) {
     this.message = message || 'This field is required.';
   }
-  Required.prototype.validate = function(observable) {
-    var value;
-    if (typeof observable() === 'number') {
+  Required.prototype.validate = function(value) {
+    if (typeof value === 'number') {
       return true;
     }
-    value = ko.utils.stringTrim(observable());
+    value = ko.utils.stringTrim(value);
     return (value != null) && value !== '';
   };
   return Required;
@@ -26,9 +25,8 @@ Max = (function() {
     this.length = length;
     this.message = message || ("Please enter no more than " + this.length + " character(s).");
   }
-  Max.prototype.validate = function(observable) {
-    var value, _ref;
-    value = ko.utils.stringTrim((_ref = observable()) != null ? _ref.toString() : void 0);
+  Max.prototype.validate = function(value) {
+    value = ko.utils.stringTrim(value != null ? value.toString() : void 0);
     return value.length <= this.length;
   };
   return Max;
@@ -38,10 +36,9 @@ Regex = (function() {
     this.rx = rx;
     this.message = message || 'Your entry didn\'t match the pattern.';
   }
-  Regex.prototype.validate = function(observable) {
-    var value, _ref;
-    value = ko.utils.stringTrim((_ref = observable()) != null ? _ref.toString() : void 0);
-    return value === '' || this.rx.test(observable());
+  Regex.prototype.validate = function(value) {
+    value = ko.utils.stringTrim(value != null ? value.toString() : void 0);
+    return value === '' || this.rx.test(value);
   };
   return Regex;
 })();
@@ -66,11 +63,11 @@ Equals = (function() {
     this.equalee = equalee;
     this.message = message || 'Your entry didn\'t match the other value.';
   }
-  Equals.prototype.validate = function(observable) {
+  Equals.prototype.validate = function(value) {
     if (typeof this.equalee === 'function') {
-      return observable() === this.equalee();
+      return value === this.equalee();
     } else {
-      return observable() === this.equalee;
+      return value === this.equalee;
     }
   };
   return Equals;
@@ -97,56 +94,79 @@ ko.utils.isArray = function(obj) {
 Validation = (function() {
   function Validation(configuration, viewmodel) {
     this.validate = __bind(this.validate, this);
-    var key, settings;
+    var interceptor, key, observable, settings;
     this.cache = [];
     if (configuration != null) {
       for (key in configuration) {
         settings = configuration[key];
+        observable = viewmodel[key];
         if (!ko.utils.isArray(configuration[key])) {
-          this.addValidators(viewmodel[key], configuration[key]);
+          interceptor = this.addValidators(observable, configuration[key]);
         } else {
-          this.addValidators.apply(this, [viewmodel[key]].concat(__slice.call(configuration[key])));
+          interceptor = this.addValidators.apply(this, [observable].concat(__slice.call(configuration[key])));
         }
+        viewmodel[key] = interceptor;
       }
     }
   }
   Validation.prototype.addValidators = function() {
-    var observable, validators;
+    var errors, interceptor, isValid, observable, validate, validators;
     observable = arguments[0], validators = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    errors = ko.observableArray();
+    isValid = ko.dependentObservable(function() {
+      return errors().length === 0;
+    });
+    validate = __bind(function(validators, value) {
+      return errors(this.runValidators(validators, value));
+    }, this);
+    interceptor = ko.dependentObservable({
+      read: observable,
+      write: __bind(function(value) {
+        interceptor.validate(validators, value);
+        if (isValid()) {
+          return observable(value);
+        }
+      }, this)
+    });
     this.cache.push({
-      observable: observable,
+      observable: interceptor,
       validators: validators
     });
-    observable.errors = ko.observableArray();
-    observable.isValid = ko.dependentObservable(function() {
-      return observable.errors().length === 0;
-    });
-    return observable.subscribe(__bind(function() {
-      return this._validate.apply(this, [observable].concat(__slice.call(validators)));
-    }, this));
+    interceptor.errors = errors;
+    interceptor.isValid = isValid;
+    interceptor.validate = validate;
+    return interceptor;
   };
-  Validation.prototype.validate = function() {
-    var errors, item, _i, _len, _ref, _ref2;
-    errors = [];
-    _ref = this.cache;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      item = _ref[_i];
-      this._validate.apply(this, [item.observable].concat(__slice.call(item.validators)));
-      errors.push(item.observable.errors());
-    }
-    errors = (_ref2 = []).concat.apply(_ref2, errors);
-    return errors.length === 0;
-  };
-  Validation.prototype._validate = function() {
-    var observable, validator, validators, _i, _len, _results;
-    observable = arguments[0], validators = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    observable.errors.removeAll();
+  Validation.prototype.runValidators = function(validators, value) {
+    var validator, _i, _len, _results;
     _results = [];
     for (_i = 0, _len = validators.length; _i < _len; _i++) {
       validator = validators[_i];
-      _results.push(!validator.validate(observable) ? observable.errors.push(validator.message) : void 0);
+      if (!validator.validate(value)) {
+        _results.push(validator.message);
+      }
     }
     return _results;
+  };
+  Validation.prototype.validate = function() {
+    var errors, item, _i, _len, _ref, _ref2;
+    _ref = this.cache;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      item = _ref[_i];
+      item.observable.validate(item.validators, item.observable());
+    }
+    errors = (function() {
+      var _j, _len2, _ref2, _results;
+      _ref2 = this.cache;
+      _results = [];
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        item = _ref2[_j];
+        _results.push(this.runValidators(item.validators, item.observable()));
+      }
+      return _results;
+    }).call(this);
+    errors = (_ref2 = []).concat.apply(_ref2, errors);
+    return errors.length === 0;
   };
   return Validation;
 })();

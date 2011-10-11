@@ -61,7 +61,7 @@ class Equals
       value is @equalee
 
 
-window.validators =
+kk.validators =
   Required : Required
   Max      : Max
   Regex    : Regex
