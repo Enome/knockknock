@@ -82,7 +82,7 @@ describe 'Validators', ->
     it 'should have the correct error message', ->
 
       max = new Max 2
-      max.message.should_be 'Please enter no more than 2 character(s).'
+      max.message.should_be 'Your entry has more than 2 character(s).'
 
 
     it 'should be true if value is a number', ->
