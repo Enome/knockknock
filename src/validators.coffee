@@ -15,7 +15,7 @@ class Required
 class Max
 
   constructor : (@length, message)->
-    @message = message or "Please enter no more than #{@length} character(s)."
+    @message = message or "Your entry has more than #{@length} character(s)."
 
   validate : (value)->
 
