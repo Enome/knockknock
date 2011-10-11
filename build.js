@@ -11,8 +11,6 @@ for(var i = 0; i < files.length; i += 1){
     concatinatedFiles += fs.readFileSync(path, 'utf8');
 };
 
-console.log(concatinatedFiles);
-
 var js = Coffeescript.compile( concatinatedFiles, {bare:true} )
 
 fs.writeFile(__dirname + '/build/kk.js', js);

@@ -32,7 +32,7 @@ describe 'Validation ->', ->
 
     kkobservable = null
 
-    beforeEach -> 
+    beforeEach ->
 
       kkobservable = isValid : ->
       spyOn(kk, 'observable').andReturn kkobservable

@@ -14,12 +14,12 @@ class Validation
          if not observable.isValid()
            return false
 
-        true
+       true
+
 
   validate : ->
 
     observable.validate() for observable in @cache
-      
 
 
 kk.Validation = Validation

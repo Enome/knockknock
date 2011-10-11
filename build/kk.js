@@ -24,7 +24,7 @@ Required = (function() {
 Max = (function() {
   function Max(length, message) {
     this.length = length;
-    this.message = message || ("Please enter no more than " + this.length + " character(s).");
+    this.message = message || ("Your entry has more than " + this.length + " character(s).");
   }
   Max.prototype.validate = function(value) {
     value = ko.utils.stringTrim(value != null ? value.toString() : void 0);
@@ -115,10 +115,7 @@ Validation = (function() {
       return true;
     }, this));
   }
-  return Validation;
-})();
-({
-  validate: function() {
+  Validation.prototype.validate = function() {
     var observable, _i, _len, _ref, _results;
     _ref = this.cache;
     _results = [];
@@ -127,8 +124,9 @@ Validation = (function() {
       _results.push(observable.validate());
     }
     return _results;
-  }
-});
+  };
+  return Validation;
+})();
 kk.Validation = Validation;
 kk.getErrorMessages = function(validators, value) {
   var validator, _i, _len, _results;
@@ -140,9 +138,6 @@ kk.getErrorMessages = function(validators, value) {
     }
   }
   return _results;
-};
-ko.dependentObservable.fn.validate = function() {
-  return this._validate(this());
 };
 kk.observable = function(observable, validators, alwaysWrite) {
   var errors, interceptor, isValid, _validate;
@@ -176,6 +171,9 @@ kk.observable = function(observable, validators, alwaysWrite) {
   interceptor.errors = errors;
   interceptor.isValid = isValid;
   interceptor._validate = _validate;
+  interceptor.validate = function() {
+    return interceptor._validate(observable());
+  };
   return interceptor;
 };
 ko.bindingHandlers.validateCss = {

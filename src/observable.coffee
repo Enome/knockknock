@@ -5,9 +5,6 @@ kk.getErrorMessages = (validators, value)->
   when not validator.validate value
 
 
-ko.dependentObservable.fn.validate = ()-> @_validate @()
-
-
 kk.observable = (observable, validators, alwaysWrite=true)->
 
   if not ko.isObservable observable
@@ -34,4 +31,6 @@ kk.observable = (observable, validators, alwaysWrite=true)->
   interceptor.errors    = errors
   interceptor.isValid   = isValid
   interceptor._validate = _validate
+  interceptor.validate  = ()-> interceptor._validate observable()
+
   interceptor

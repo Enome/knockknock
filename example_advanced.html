@@ -7,6 +7,8 @@
 
     <script type='text/javascript'>
       var validators = window.kk.validators;
+      var Validation = window.kk.Validation;
+
       var Required = validators.Required;
       var Max = validators.Max
       var Regex = validators.Regex;
@@ -16,21 +18,27 @@
 
       var ViewModel = function(){
 
-        // Validation
-        this.required = kk.observable('', new Required() );
-        this.max      = kk.observable('', new Max(5) );
-        this.regex    = kk.observable('', new Regex( /[^/]+\d+/ ) );
-        this.email    = kk.observable('', new Email() );
-        this.number   = kk.observable('', new Number() );
-        this.equals   = kk.observable('', new Equals( this.number ) );
-        this.combination = kk.observable('', [ new Required(), new Email() ] );
+        this.validation = new Validation( this, {
+
+          required    : new Required(),
+          max         : new Max(5),
+          regex       : new Regex( /[^/]+\d+/ ),
+          email       : new Email(),
+          number      : new Number(),
+          equals      : new Equals( this.number ),
+          combination : [ new Required(), new Email() ]
+
+        });
+
+        this.validate = function(){
+            this.validation.validate();
+        };
 
       }; 
 
       window.onload = function(){
         ko.applyBindings( new ViewModel() );
       };
-
     </script>
 
     <style type='text/css'>
@@ -50,7 +58,7 @@
   </head>
   <body>
 
-    <h1>Knock-Knock validation: Basic example</h1>
+    <h1>Knock-Knock validation: Advance example</h1>
 
     <p>
       For more information check out: <a href='http://github.com/Enome/knockknock'>Knock-Knock on Github</a>.
@@ -62,7 +70,6 @@
       <ul data-bind='foreach: required.errors'>
         <li data-bind='text: $data'></li>
       </ul>
-      <button data-bind='click: required.validate'>Force validate</button>
     </p>
 
     <p>
@@ -114,5 +121,8 @@
       </ul>
     </p>
 
+    <p> 
+      <button data-bind='click: validate'>Validate</button> 
+    </p> 
   </body>
 </html>
