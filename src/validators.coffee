@@ -68,7 +68,3 @@ kk.validators =
   Email    : Email
   Number   : Number
   Equals   : Equals
-
-
-if module?
-  module.exports = window.validators

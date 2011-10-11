@@ -100,7 +100,7 @@ describe 'kk.observable ->', ->
   describe 'Validate ->', ->
 
 
-    it 'should ', ->
+    it 'should (re)validate the observable', ->
 
       somevalue = kk.observable '', new Required, false
       somevalue.errors().length.should_be 0

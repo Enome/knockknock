@@ -6,257 +6,67 @@ Required = validators.Required
 Email    = validators.Email
 
 
-describe 'Validation', ->
+describe 'Validation ->', ->
 
-  describe 'Add Validators', ->
 
-    describe 'Validators without options', ->
+  vm = _vm = config = validation = null
 
-      somevalue = null
+  beforeEach ->
 
-      beforeEach ->
-        validation = new Validation()
-        somevalue = validation.addValidators ko.observable(), new Required
+    _vm =
+      somevalue : ko.observable()
+      othervalue : ko.observable()
 
+    vm =
+      somevalue : _vm.somevalue
+      othervalue : _vm.othervalue
 
-      describe 'isValid', ->
+    config =
+      somevalue : new Required
+      othervalue : [ new Email, new Max(15) ]
 
-        it 'should be true with string', ->
 
-          somevalue 'somevalue'
-          expect(somevalue.isValid()).toBeTruthy()
 
-        it 'should be false with empty string', ->
+  describe 'Configuration ->', ->
 
-          somevalue ''
-          expect(somevalue.isValid()).toBeFalsy()
 
+    kkobservable = null
 
-      describe 'Write to observable', ->
+    beforeEach -> 
 
-        it 'should not change the observable if it\'s not valid', ->
+      kkobservable = isValid : ->
+      spyOn(kk, 'observable').andReturn kkobservable
 
-          somevalue 'some value'
-          somevalue ''
-          somevalue().should_be 'some value'
 
+    it 'should replace the observables with kk.observables that are in the configuration' , ->
 
-      describe 'Errors', ->
+      validation = new Validation vm, config
+      expect(vm.somevalue).toEqual kkobservable
+      expect(vm.othervalue).toEqual kkobservable
 
-        it 'should have one item', ->
 
-          somevalue ''
-          somevalue.errors().length.should_be 1
+    it 'should create observables with the settings from the configuration', ->
 
+      validation = new Validation vm, config
 
-        it 'should have no errors', ->
+      for key, value of config
+        kk.observable.should_have_been_called_with _vm[key], value, true
 
-          somevalue 'somevalue'
-          somevalue.errors().length.should_be 0
 
+  describe 'isValid ->', ->
+    
 
-        it 'should have the required validator message', ->
-          required = new Required()
+    it 'should be invalid when somevalue is empty', ->
 
-          somevalue ''
-          somevalue.errors()[0].should_be required.message
+      validation = new Validation vm, config
+      vm.somevalue ''
+      vm.othervalue 'othervalue'
+      expect(validation.isValid()).toBeFalsy()
 
 
-        describe 'Multiple calls to same observable', ->
+    it 'should be valid when both observables have a value', ->
 
-          it 'should refresh the error list', ->
-            somevalue ''
-            somevalue 'somevalue'
-
-            somevalue.errors().length.should_be 0
-
-
-    describe 'Validators with options', ->
-
-
-      somevalue = null
-
-      beforeEach ->
-
-        validation = new Validation()
-        somevalue = validation.addValidators ko.observable(), new Max 5
-
-
-      describe 'isValid', ->
-
-
-        it 'should be true with a string with 5 chars', ->
-
-          somevalue '12345'
-          expect(somevalue.isValid()).toBeTruthy()
-
-
-        it 'should be true with a string with 3 chars', ->
-
-          somevalue '123'
-          expect(somevalue.isValid()).toBeTruthy()
-
-
-        it 'should be false with a string with 6 chars', ->
-
-          somevalue '123456'
-          expect(somevalue.isValid()).toBeFalsy()
-  
-
-    describe 'Multiple validators', ->
-
-
-      somevalue = null
-
-      beforeEach ->
-
-        validation = new Validation()
-        somevalue = validation.addValidators ko.observable(), new Required, new Max 5
-
-
-      describe 'isValid', ->
-
-
-        it 'should be true with a string', ->
-
-          somevalue 'some'
-          expect(somevalue.isValid()).toBeTruthy()
-
-
-        it 'should be false with empty string', ->
-
-          somevalue ''
-          expect(somevalue.isValid()).toBeFalsy()
-
-
-        it 'should be true with a string with 5 chars', ->
-
-          somevalue '12345'
-          expect(somevalue.isValid()).toBeTruthy()
-
-
-        it 'should be true with a string with 3 chars', ->
-
-          somevalue '123'
-          expect(somevalue.isValid()).toBeTruthy()
-
-
-        it 'should be false with a string with 6 chars', ->
-
-          somevalue '123456'
-          expect(somevalue.isValid()).toBeFalsy()
-
-
-    describe 'Global validation', ->
-
-      validation = null
-      somevalue = null
-      othervalue = null
-      required = null
-      max = max
-
-      beforeEach ->
-
-        validation = new Validation()
-        required = new Required
-        max = new Max 3
-
-        somevalue = validation.addValidators ko.observable(), required
-        othervalue = validation.addValidators ko.observable(), max
-
-
-      describe 'cache', ->
-
-
-        it 'should have 2 items', ->
-
-          validation.cache.length.should_be 2
-
-
-        it 'should have somevalue as the first observable', ->
-
-          expect(validation.cache[0].observable).toEqual somevalue
-
-
-        it 'should have required as the first validators', ->
-
-          expect(validation.cache[0].validators).toEqual [required]
-
-
-        it 'should have othervalue as the second observable', ->
-
-          expect(validation.cache[1].observable).toEqual othervalue
-
-
-        it 'should have max as the second validators', ->
-
-          expect(validation.cache[1].validators).toEqual [max]
-
-
-      describe 'validate', ->
-
-        it 'should validate all observables in cache', ->
-        
-          validation.runValidators = jasmine.createSpy()
-          validation.validate()
-
-          for item in validation.cache
-            validation.runValidators.should_have_been_called_with \
-            item.validators, item.observable()
-
-
-        it 'should return true', ->
-
-          somevalue 'somevalue'
-          othervalue '123'
-          expect(validation.validate()).toBeTruthy()
-
-
-        it 'should return false', ->
-          somevalue ''
-          othervalue '1234'
-          expect(validation.validate()).toBeFalsy()
-
-
-  describe 'Setup configuration with constructor', ->
-
-
-    describe 'Process configuration', ->
-
-      observable   = ko.observable()
-      configMulti  = null
-      configSingle = null
-      viewmodel    = null
-
-
-      beforeEach ->
-        spyOn(Validation.prototype, 'addValidators').andReturn 'interceptor'
-
-        viewmodel    = somevalue : observable
-        configSingle = somevalue : new Required
-        configMulti  = somevalue : [ new Required, new Email ]
-
-
-      it 'should add many validators to somevalue observable', ->
-
-        validation = new Validation configMulti, viewmodel
-        validation.addValidators.should_have_been_called_with \
-        observable, configMulti.somevalue...
-
-
-      it 'should add one validator to othervalue observable', ->
-
-        validation = new Validation configSingle, viewmodel
-        validation.addValidators.should_have_been_called_with \
-        observable, configSingle.somevalue
-
-
-      it 'should replace the observable with the interceptor if there is many validators', ->
-
-        validation = new Validation configMulti, viewmodel
-        viewmodel.somevalue.should_be 'interceptor'
-
-      it 'should replace the observable with the interceptor if there is one validator', ->
-
-        validation = new Validation configMulti, viewmodel
-        viewmodel.somevalue.should_be 'interceptor'
+      validation = new Validation vm, config
+      vm.somevalue 'somevalue'
+      vm.othervalue 'g@g.com'
+      expect(validation.isValid()).toBeTruthy()

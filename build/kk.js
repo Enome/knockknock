@@ -7,6 +7,7 @@ var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, par
   child.__super__ = parent.prototype;
   return child;
 }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
+window.kk = {};
 Required = (function() {
   function Required(message) {
     this.message = message || 'This field is required.';
@@ -72,7 +73,7 @@ Equals = (function() {
   };
   return Equals;
 })();
-window.validators = {
+kk.validators = {
   Required: Required,
   Max: Max,
   Regex: Regex,
@@ -80,106 +81,109 @@ window.validators = {
   Number: Number,
   Equals: Equals
 };
-if (typeof module !== "undefined" && module !== null) {
-  module.exports = window.validators;
-}
-ko.utils.removeClass = function(element, className) {
-  var regex;
-  regex = new RegExp("(?:^|\\s)" + className + "(?!\\S)");
-  return element.className = element.className.replace(regex, '');
-};
-ko.utils.isArray = function(obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
+kk.utils = {
+  removeClass: function(element, className) {
+    var regex;
+    regex = new RegExp("(?:^|\\s)" + className + "(?!\\S)");
+    return element.className = element.className.replace(regex, '');
+  },
+  isArray: function(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+  }
 };
 Validation = (function() {
-  function Validation(configuration, viewmodel) {
-    this.validate = __bind(this.validate, this);
-    var interceptor, key, observable, settings;
+  function Validation(viewmodel, configuration, alwaysWrite) {
+    var key, value;
+    if (alwaysWrite == null) {
+      alwaysWrite = true;
+    }
     this.cache = [];
-    if (configuration != null) {
-      for (key in configuration) {
-        settings = configuration[key];
-        observable = viewmodel[key];
-        if (!ko.utils.isArray(configuration[key])) {
-          interceptor = this.addValidators(observable, configuration[key]);
-        } else {
-          interceptor = this.addValidators.apply(this, [observable].concat(__slice.call(configuration[key])));
-        }
-        viewmodel[key] = interceptor;
-      }
+    for (key in configuration) {
+      value = configuration[key];
+      viewmodel[key] = kk.observable(viewmodel[key], value, alwaysWrite);
+      this.cache.push(viewmodel[key]);
     }
+    this.isValid = ko.dependentObservable(__bind(function() {
+      var observable, _i, _len, _ref;
+      _ref = this.cache;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        observable = _ref[_i];
+        if (!observable.isValid()) {
+          return false;
+        }
+      }
+      return true;
+    }, this));
   }
-  Validation.prototype.addValidators = function() {
-    var errors, interceptor, isValid, observable, validate, validators;
-    observable = arguments[0], validators = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    errors = ko.observableArray();
-    isValid = ko.dependentObservable(function() {
-      return errors().length === 0;
-    });
-    validate = __bind(function(validators, value) {
-      return errors(this.runValidators(validators, value));
-    }, this);
-    interceptor = ko.dependentObservable({
-      read: observable,
-      write: __bind(function(value) {
-        interceptor.validate(validators, value);
-        if (isValid()) {
-          return observable(value);
-        }
-      }, this)
-    });
-    this.cache.push({
-      observable: interceptor,
-      validators: validators
-    });
-    interceptor.errors = errors;
-    interceptor.isValid = isValid;
-    interceptor.validate = validate;
-    return interceptor;
-  };
-  Validation.prototype.runValidators = function(validators, value) {
-    var validator, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = validators.length; _i < _len; _i++) {
-      validator = validators[_i];
-      if (!validator.validate(value)) {
-        _results.push(validator.message);
-      }
-    }
-    return _results;
-  };
-  Validation.prototype.validate = function() {
-    var errors, item, _i, _len, _ref, _ref2;
-    _ref = this.cache;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      item = _ref[_i];
-      item.observable.validate(item.validators, item.observable());
-    }
-    errors = (function() {
-      var _j, _len2, _ref2, _results;
-      _ref2 = this.cache;
-      _results = [];
-      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-        item = _ref2[_j];
-        _results.push(this.runValidators(item.validators, item.observable()));
-      }
-      return _results;
-    }).call(this);
-    errors = (_ref2 = []).concat.apply(_ref2, errors);
-    return errors.length === 0;
-  };
   return Validation;
 })();
-if (typeof exports !== "undefined" && exports !== null) {
-  exports.Validation = Validation;
-}
-window.Validation = Validation;
+({
+  validate: function() {
+    var observable, _i, _len, _ref, _results;
+    _ref = this.cache;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      observable = _ref[_i];
+      _results.push(observable.validate());
+    }
+    return _results;
+  }
+});
+kk.Validation = Validation;
+kk.getErrorMessages = function(validators, value) {
+  var validator, _i, _len, _results;
+  _results = [];
+  for (_i = 0, _len = validators.length; _i < _len; _i++) {
+    validator = validators[_i];
+    if (!validator.validate(value)) {
+      _results.push(validator.message);
+    }
+  }
+  return _results;
+};
+ko.dependentObservable.fn.validate = function() {
+  return this._validate(this());
+};
+kk.observable = function(observable, validators, alwaysWrite) {
+  var errors, interceptor, isValid, _validate;
+  if (alwaysWrite == null) {
+    alwaysWrite = true;
+  }
+  if (!ko.isObservable(observable)) {
+    observable = ko.observable(observable);
+  }
+  if (!kk.utils.isArray(validators)) {
+    validators = [validators];
+  }
+  errors = ko.observableArray();
+  isValid = ko.dependentObservable(function() {
+    return errors().length === 0;
+  });
+  _validate = function(value) {
+    return errors(kk.getErrorMessages(validators, value));
+  };
+  interceptor = ko.dependentObservable({
+    read: observable,
+    write: function(value) {
+      _validate(value);
+      if (alwaysWrite) {
+        return observable(value);
+      } else if (interceptor.isValid()) {
+        return observable(value);
+      }
+    }
+  });
+  interceptor.errors = errors;
+  interceptor.isValid = isValid;
+  interceptor._validate = _validate;
+  return interceptor;
+};
 ko.bindingHandlers.validateCss = {
   init: function(element, valueAccessor) {
     var observable;
     observable = valueAccessor();
-    ko.utils.removeClass(element, 'valid');
-    ko.utils.removeClass(element, 'invalid');
+    kk.utils.removeClass(element, 'valid');
+    kk.utils.removeClass(element, 'invalid');
     if (observable.isValid()) {
       return element.className = ko.utils.stringTrim(element.className += ' valid');
     } else {

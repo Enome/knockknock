@@ -1,66 +1,25 @@
 class Validation
 
-  constructor : (configuration, viewmodel)->
+  constructor : (viewmodel, configuration, alwaysWrite=true)->
 
     @cache = []
 
-    if configuration?
-      for key, settings of configuration
-
-        observable = viewmodel[key]
-
-        if not ko.utils.isArray configuration[key]
-          interceptor = @addValidators observable, configuration[key]
-
-        else
-          interceptor = @addValidators observable, configuration[key]...
-
-        viewmodel[key] = interceptor
+    for key, value of configuration
+      viewmodel[key] = kk.observable viewmodel[key], value, alwaysWrite
+      @cache.push viewmodel[key]
 
 
-  addValidators : (observable, validators...)->
+     @isValid = ko.dependentObservable =>
+       for observable in @cache
+         if not observable.isValid()
+           return false
 
-    errors = ko.observableArray()
-    isValid = ko.dependentObservable -> errors().length is 0
-    validate = (validators, value)=> errors @runValidators validators, value
+        true
 
-    interceptor = ko.dependentObservable
-      read : observable
-      write : (value)=>
+  validate : ->
 
-        interceptor.validate validators, value
-
-        if isValid()
-          observable value
-
-
-    @cache.push
-      observable : interceptor
-      validators : validators
-
-    interceptor.errors   = errors
-    interceptor.isValid  = isValid
-    interceptor.validate = validate
+    observable.validate() for observable in @cache
       
-    interceptor
-
-
-  runValidators : (validators, value)->
-
-    validator.message \
-    for validator in validators \
-    when not validator.validate value
-
-
-  validate : =>
-
-    item.observable.validate(item.validators, item.observable()) for item in @cache
-
-    errors = ( @runValidators item.validators, item.observable() \
-               for item in @cache )
-
-    errors = [].concat errors...
-    errors.length is 0
 
 
 kk.Validation = Validation
