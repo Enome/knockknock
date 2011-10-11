@@ -6,32 +6,26 @@
     <script src='build/kk.js' type='text/javascript'></script>
 
     <script type='text/javascript'>
-      var Required = window.validators.Required;
-      var Max = window.validators.Max
-      var Regex = window.validators.Regex;
-      var Email = window.validators.Email
-      var Number = window.validators.Number
-      var Equals = window.validators.Equals
+      var validators = window.kk.validators;
+      var Required = validators.Required;
+      var Max = validators.Max
+      var Regex = validators.Regex;
+      var Email = validators.Email
+      var Number =validators.Number
+      var Equals =validators.Equals
 
       var ViewModel = function(){
 
         // Validation
-        this.validation = new Validation();
-        this.required = this.validation.addValidators( ko.observable(), new Required() );
-        this.max = this.validation.addValidators( ko.observable(), new Max(5) );
-        this.regex = this.validation.addValidators( ko.observable(), new Regex( /[^/]+\d+/ ) );
-        this.email = this.validation.addValidators( ko.observable(), new Email() );
-        this.number = this.validation.addValidators( ko.observable(), new Number() );
-        this.equals = this.validation.addValidators( ko.observable(), new Equals( this.number ) );
-        this.combination = this.validation.addValidators( ko.observable(), new Required(), new Email() );
+        this.required = kk.observable('', new Required() );
+        this.max      = kk.observable('', new Max(5) );
+        this.regex    = kk.observable('', new Regex( /[^/]+\d+/ ) );
+        this.email    = kk.observable('', new Email() );
+        this.number   = kk.observable('', new Number() );
+        this.equals   = kk.observable('', new Equals( this.number ) );
+        this.combination = kk.observable('', [ new Required(), new Email() ] );
 
       }; 
-
-      ViewModel.prototype.validate = function(){
-        if( this.validation.validate() ){
-          alert('Do ajaxy stuff');
-        };
-      };
 
       window.onload = function(){
         ko.applyBindings( new ViewModel() );
@@ -55,14 +49,10 @@
   </head>
   <body>
 
-    <h1>Knock-knock Validation: Example</h1>
+    <h1>Knock-knock Validation: Basic example</h1>
 
     <p>
       For more information check out: <a href='http://github.com/Enome/knockknock'>knockknock on Github</a>.
-    </p>
-
-    <p>
-      This example uses addValidators directly which might be useful. Check out example_short.html for a shorter syntax to define validation rules onto an observable.
     </p>
 
     <p>
@@ -120,10 +110,6 @@
       <ul data-bind='foreach: combination.errors'>
         <li data-bind='text: $data'></li>
       </ul>
-    </p>
-
-    <p>
-      <button data-bind='click: validate'>Validate</button>
     </p>
 
   </body>
